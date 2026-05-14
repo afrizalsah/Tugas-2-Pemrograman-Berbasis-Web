@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Stok Bahan Ajar UT</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<div id="app">
+
+  <div class="sidebar">
+    <a href="dashboard.html">🏠 Dashboard</a>
+  </div>
+
+  <div class="content">
+
+    <!-- FILTER -->
+    <div class="card">
+      <h2>Filter & Sort</h2>
+
+      <!-- Filter UPBJJ -->
+      <select v-model="filterUpbjj">
+        <option value="">Semua UT Daerah</option>
+        <option v-for="u in upbjjList" :key="u">
+          {{ u }}
+        </option>
+      </select>
+
+      <!-- Dependent kategori -->
+      <select v-if="filterUpbjj" v-model="filterKategori">
+        <option value="">Semua Kategori</option>
+        <option v-for="k in kategoriList" :key="k">
+          {{ k }}
+        </option>
+      </select>
+
+      <!-- Reminder -->
+      <label>
+        <input type="checkbox" v-model="onlyWarning">
+        Hanya stok menipis / kosong
+      </label>
+
+      <!-- SORT -->
+      <select v-model="sortBy">
+        <option value="">Urutkan</option>
+        <option value="judul">Judul</option>
+        <option value="qty">Stok</option>
+        <option value="harga">Harga</option>
+      </select>
+
+      <button class="btn-warning" @click="resetFilter">
+        Reset
+      </button>
+    </div>
+
+    <!-- TABEL -->
+    <div class="card">
+        <div class="header-flex">
+          <h2>Stok Bahan Ajar UT</h2>
+
+          <button
+            class="btn-primary"
+            @click="showForm = true"
+          >
+            + Tambah Data
+          </button>
+        </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Kode</th>
+            <th>Judul</th>
+            <th>Kategori</th>
+            <th>UPBJJ</th>
+            <th>Lokasi Rak</th>
+            <th>Harga</th>
+            <th>Qty</th>
+            <th>Safety</th>
+            <th>Status</th>
+            <th>Catatan</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr v-for="(item,index) in filteredData" :key="index">
+
+            <td>{{ item.kode }}</td>
+
+            <td>
+              <input v-if="item.edit" v-model="item.judul">
+              <span v-else>{{ item.judul }}</span>
+            </td>
+
+            <td>{{ item.kategori }}</td>
+
+            <td>{{ item.upbjj }}</td>
+
+            <td>{{ item.lokasiRak }}</td>
+
+            <td>
+              Rp {{ item.harga.toLocaleString() }}
+            </td>
+
+            <td>
+              <input
+                v-if="item.edit"
+                type="number"
+                v-model.number="item.qty"
+                style="width:70px"
+              >
+
+              <span v-else>
+                {{ item.qty }}
+              </span>
+            </td>
+
+            <td>{{ item.safety }}</td>
+
+            <td>
+              <span
+                :class="getStatusClass(item)"
+              >
+                {{ getStatusText(item) }}
+              </span>
+            </td>
+
+            <td v-html="item.catatanHTML"></td>
+
+            <td>
+                 <!-- MODE NORMAL -->
+                <div v-if="!item.edit">
+
+                <button
+                class="btn-primary"
+                @click="editData(item)"
+                >
+                Edit
+                </button>
+
+                <button
+                class="btn-danger"
+                @click="hapusData(index)"
+                >
+                Delete
+                </button>
+
+                </div>
+
+                <!-- MODE EDIT -->
+                <div v-else>
+
+                <button
+                class="btn-primary"
+                @click="simpanEdit(item)"
+                >
+                Simpan
+                </button>
+
+                <button
+                class="btn-warning"
+                @click="batalEdit(item)"
+                >
+                Batal
+                </button>
+
+                </div>
+
+            </td>
+
+          </tr>
+        </tbody>
+
+      </table>
+    </div>
+
+<!-- MODAL TAMBAH DATA -->
+<div
+  class="modal"
+  v-if="showForm"
+>
+
+  <div class="modal-content">
+
+    <div class="header-flex">
+      <h2>Tambah Data Bahan Ajar</h2>
+
+      <button
+        class="btn-danger"
+        @click="showForm = false"
+      >
+        X
+      </button>
+    </div>
+
+    <input v-model="form.kode" placeholder="Kode">
+
+    <input v-model="form.judul" placeholder="Judul">
+
+    <select v-model="form.kategori">
+      <option value="">Pilih Kategori</option>
+      <option v-for="k in kategoriList">
+        {{ k }}
+      </option>
+    </select>
+
+    <select v-model="form.upbjj">
+      <option value="">Pilih UPBJJ</option>
+      <option v-for="u in upbjjList">
+        {{ u }}
+      </option>
+    </select>
+
+    <input
+      v-model="form.lokasiRak"
+      placeholder="Lokasi Rak"
+    >
+
+    <input
+      type="number"
+      v-model.number="form.harga"
+      placeholder="Harga"
+    >
+
+    <input
+      type="number"
+      v-model.number="form.qty"
+      placeholder="Jumlah Stok"
+    >
+
+    <input
+      type="number"
+      v-model.number="form.safety"
+      placeholder="Safety Stock"
+    >
+
+    <input
+      v-model="form.catatanHTML"
+      placeholder="Catatan"
+    >
+
+    <br>
+
+    <button
+      class="btn-primary"
+      @click="tambahData"
+    >
+      Simpan Data
+    </button>
+
+  </div>
+
+</div>
+
+  </div>
+
+</div>
+
+<script src="js/dataBahanAjar.js"></script>
+<script src="js/stok-app.js"></script>
+
+</body>
+</html>
