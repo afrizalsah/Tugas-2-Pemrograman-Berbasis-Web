@@ -128,28 +128,6 @@ function cariTracking() {
   }
 }
 
-// STOK
-function tampilStok() {
-  let tabel = document.getElementById("tabelStok");
-  tabel.innerHTML = "";
-
-  dataBahanAjar.forEach(d => {
-    tabel.innerHTML += `
-      <tr>
-        <td>
-          <img src="assets/${d.cover}" alt="${d.namaBarang}" style="width: 100px; height: auto; border-radius: 4px; border: 1px solid #ddd;">
-        </td>
-        <td>${d.kodeLokasi}</td>
-        <td>${d.kodeBarang}</td>
-        <td>${d.namaBarang}</td>
-        <td>${d.jenisBarang}</td>
-        <td>${d.edisi}</td>
-        <td>${d.stok}</td>
-      </tr>
-    `;
-  });
-}
-
 function tambahStok() {
   let cover = document.getElementById("Cover").value;
   let kodeLokasi = document.getElementById("Kode Lokasi").value;
