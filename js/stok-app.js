@@ -2,10 +2,11 @@ new Vue({
   el: '#app',
 
   data: {
+
     stok: dataBahanAjar.stok.map(item => ({
-    ...item,
-    edit: false
-  })),
+      ...item,
+      edit: false
+    })),
 
     upbjjList: dataBahanAjar.upbjjList,
 
@@ -18,8 +19,17 @@ new Vue({
     onlyWarning: false,
 
     sortBy: '',
+
+    // MODAL
     showForm: false,
 
+    // MODE EDIT
+    isEdit: false,
+
+    // INDEX DATA YANG DIEDIT
+    editKode: null,
+
+    // FORM
     form: {
       kode: '',
       judul: '',
@@ -82,43 +92,114 @@ new Vue({
 
   methods: {
 
-    editData(item) {
+    // =========================
+    // OPEN FORM TAMBAH
+    // =========================
+    openTambahForm() {
 
-    item.backup = {
-      judul: item.judul,
-      qty: item.qty
-    };
+      // MODE TAMBAH
+      this.isEdit = false;
 
-    item.edit = true;
+      this.editKode = null;
+
+      // RESET FORM
+      this.form = {
+        kode: '',
+        judul: '',
+        kategori: '',
+        upbjj: '',
+        lokasiRak: '',
+        harga: '',
+        qty: '',
+        safety: '',
+        catatanHTML: ''
+      };
+
+      // TAMPILKAN MODAL
+      this.showForm = true;
     },
 
-    simpanEdit(item) {
+    // =========================
+    // EDIT DATA
+    // =========================
+    editData(item, index) {
 
-    item.edit = false;
+      this.isEdit = true;
 
-    alert('Data berhasil diupdate');
+      this.editKode = item.kode;
+
+      this.form = {
+        kode: item.kode,
+        judul: item.judul,
+        kategori: item.kategori,
+        upbjj: item.upbjj,
+        lokasiRak: item.lokasiRak,
+        harga: item.harga,
+        qty: item.qty,
+        safety: item.safety,
+        catatanHTML: item.catatanHTML
+      };
+
+      this.showForm = true;
     },
 
-    batalEdit(item) {
+    // =========================
+    // SIMPAN EDIT
+    // =========================
+    simpanEdit() {
 
-    item.judul = item.backup.judul;
-    item.qty = item.backup.qty;
+      // VALIDASI
+      if (
+        !this.form.kode ||
+        !this.form.judul ||
+        !this.form.kategori ||
+        !this.form.upbjj
+      ) {
 
-    item.edit = false;
+        alert('Data wajib diisi!');
+        return;
+      }
+
+        // CARI INDEX BERDASARKAN KODE
+      const index = this.stok.findIndex(
+      item => item.kode === this.editKode
+      );
+
+      // UPDATE DATA
+      if (index !== -1) {
+
+    this.stok.splice(index, 1, {
+      ...this.form,
+      edit: false
+    });
+
+  }
+
+      alert('Data berhasil diupdate');
+
+      this.showForm = false;
+
+      this.resetForm();
     },
 
+    // =========================
+    // HAPUS DATA
+    // =========================
     hapusData(index) {
 
-    let konfirmasi = confirm(
-      'Yakin ingin menghapus data ini?'
-    );
+      let konfirmasi = confirm(
+        'Yakin ingin menghapus data ini?'
+      );
 
-    if (konfirmasi) {
-      this.stok.splice(index, 1);
-    }
+      if (konfirmasi) {
+        this.stok.splice(index, 1);
+      }
 
     },
 
+    // =========================
+    // STATUS TEXT
+    // =========================
     getStatusText(item) {
 
       if (item.qty === 0) {
@@ -132,6 +213,9 @@ new Vue({
       return '✅ Aman';
     },
 
+    // =========================
+    // STATUS CLASS
+    // =========================
     getStatusClass(item) {
 
       if (item.qty === 0) {
@@ -145,6 +229,9 @@ new Vue({
       return 'aman';
     },
 
+    // =========================
+    // RESET FILTER
+    // =========================
     resetFilter() {
 
       this.filterUpbjj = '';
@@ -153,6 +240,9 @@ new Vue({
       this.sortBy = '';
     },
 
+    // =========================
+    // TAMBAH DATA
+    // =========================
     tambahData() {
 
       // VALIDASI
@@ -167,15 +257,29 @@ new Vue({
         return;
       }
 
+      // PUSH DATA
       this.stok.push({
         ...this.form,
         edit: false
       });
 
       alert('Data berhasil ditambahkan');
+
       this.showForm = false;
 
-      // RESET FORM
+      this.resetForm();
+
+    },
+
+    // =========================
+    // RESET FORM
+    // =========================
+    resetForm() {
+
+      this.isEdit = false;
+
+      this.editIndex = null;
+
       this.form = {
         kode: '',
         judul: '',

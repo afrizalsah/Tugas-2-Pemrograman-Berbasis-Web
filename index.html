@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Login SITTA</title>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
 
@@ -15,19 +16,25 @@
 <form onsubmit="return login()">
   <input type="email" id="email" placeholder="Email" required><br>
   <input type="password" id="password" placeholder="Password" required><br>
-  <button type="submit">Login</button>
+  <button type="submit">
+    <i class="fas fa-sign-in-alt"></i> Login
+  </button>
 </form>
 
 <div id="notif" class="notif"></div>
 
 <div class="link-container">
-  <p class="link-text" onclick="showModal('lupa')">Lupa Password?</p>
-  <p class="link-text" onclick="showModal('daftar')">Daftar Akun</p>
+  <p class="link-text" onclick="showModal('lupa')">
+    <i class="fas fa-question-circle"></i> Lupa Password?
+  </p>
+  <p class="link-text" onclick="showModal('daftar')">
+    <i class="fas fa-user-plus"></i> Daftar Akun
+  </p>
 </div>
 
-<div id="modal" class="modal">
+<div id="modal" class="modal-base modal-js">
   <div class="modal-content">
-    <span onclick="closeModal()">&times;</span>
+    <span class="modal-close" onclick="closeModal()">&times;</span>
     <p id="modalText"></p>
   </div>
 </div>

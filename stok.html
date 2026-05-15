@@ -7,6 +7,7 @@
   <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
 <body>
@@ -19,44 +20,101 @@
 
   <div class="content">
 
-    <!-- FILTER -->
-    <div class="card">
-      <h2>Filter & Sort</h2>
+  <!-- FILTER CARD -->
+<div class="card filter-card">
 
-      <!-- Filter UPBJJ -->
-      <select v-model="filterUpbjj">
-        <option value="">Semua UT Daerah</option>
-        <option v-for="u in upbjjList" :key="u">
-          {{ u }}
-        </option>
-      </select>
+  <div class="filter-container">
 
-      <!-- Dependent kategori -->
-      <select v-if="filterUpbjj" v-model="filterKategori">
-        <option value="">Semua Kategori</option>
-        <option v-for="k in kategoriList" :key="k">
-          {{ k }}
-        </option>
-      </select>
+    <!-- FILTER UT -->
+    <div class="filter-group">
+      <label>UT Daerah</label>
 
-      <!-- Reminder -->
-      <label>
-        <input type="checkbox" v-model="onlyWarning">
-        Hanya stok menipis / kosong
+      <div class="input-icon">
+        <i class="fa-solid fa-building-columns"></i>
+
+        <select v-model="filterUpbjj">
+          <option value="" disabled style="color:#999;">Filter</option>
+
+          <option
+            v-for="u in upbjjList"
+            :key="u"
+          >
+            {{ u }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <!-- FILTER KATEGORI -->
+    <div
+      class="filter-group"
+      v-if="filterUpbjj"
+    >
+      <label>Kategori</label>
+
+      <div class="input-icon">
+        <i class="fa-solid fa-layer-group"></i>
+
+        <select v-model="filterKategori">
+          <option value="" disabled style="color:#999;">Filter</option>
+
+          <option
+            v-for="k in kategoriList"
+            :key="k"
+          >
+            {{ k }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <!-- SORT -->
+    <div class="filter-group">
+      <label>Urutkan</label>
+
+      <div class="input-icon">
+        <i class="fa-solid fa-arrow-down-wide-short"></i>
+
+        <select v-model="sortBy">
+          <option value="" disabled style="color:#999;">Sort By</option>
+          <option value="judul">Judul</option>
+          <option value="qty">Jumlah Stok</option>
+          <option value="harga">Harga</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- CHECKBOX -->
+    <div class="filter-check">
+      <label class="checkbox-modern">
+
+        <input
+          type="checkbox"
+          v-model="onlyWarning"
+        >
+
+        <span class="checkmark"></span>
+
+        <span class="checkbox-text">
+          Hanya stok menipis / kosong
+        </span>
+
       </label>
+    </div>
 
-      <!-- SORT -->
-      <select v-model="sortBy">
-        <option value="">Urutkan</option>
-        <option value="judul">Judul</option>
-        <option value="qty">Stok</option>
-        <option value="harga">Harga</option>
-      </select>
-
-      <button class="btn-warning" @click="resetFilter">
-        Reset
+    <!-- RESET -->
+    <div class="filter-action">
+      <button
+        class="btn-reset"
+        @click="resetFilter"
+      >
+        <i class="fa-solid fa-rotate-right"></i>
       </button>
     </div>
+
+  </div>
+
+</div>
 
     <!-- TABEL -->
     <div class="card">
@@ -65,9 +123,9 @@
 
           <button
             class="btn-primary"
-            @click="showForm = true"
+            @click="openTambahForm"
           >
-            + Tambah Data
+            Tambah Data
           </button>
         </div>
 
@@ -138,17 +196,17 @@
                 <div v-if="!item.edit">
 
                 <button
-                class="btn-primary"
+                class="btn-primary btn-icon"
                 @click="editData(item)"
                 >
-                Edit
+                  <i class="fa-solid fa-pen-to-square"></i>
                 </button>
 
                 <button
-                class="btn-danger"
+                class="btn-danger btn-icon"
                 @click="hapusData(index)"
                 >
-                Delete
+                  <i class="fa-solid fa-trash"></i>
                 </button>
 
                 </div>
@@ -157,17 +215,17 @@
                 <div v-else>
 
                 <button
-                class="btn-primary"
-                @click="simpanEdit(item)"
+                class="btn-primary btn-icon"
+                @click="editData(item, index)"
                 >
-                Simpan
+                  <i class="fa-solid fa-save"></i>
                 </button>
 
                 <button
-                class="btn-warning"
+                class="btn-warning btn-icon"
                 @click="batalEdit(item)"
                 >
-                Batal
+                  <i class="fa-solid fa-times"></i>
                 </button>
 
                 </div>
@@ -182,85 +240,97 @@
 
 <!-- MODAL TAMBAH DATA -->
 <div
-  class="modal"
-  v-if="showForm"
->
+  class="modal-base modal-vue"
+  v-if="showForm">
 
-  <div class="modal-content">
+  <div class="modal-content modal-form">
 
-    <div class="header-flex">
-      <h2>Tambah Data Bahan Ajar</h2>
+    <div class="modal-header">
+      <h2>{{ isEdit ? 'Edit Data Bahan Ajar' : 'Tambah Data Bahan Ajar' }}</h2>
 
       <button
-        class="btn-danger"
+        class="modal-btn-close"
         @click="showForm = false"
       >
         X
       </button>
     </div>
 
-    <input v-model="form.kode" placeholder="Kode">
+    
+    <div class="form-grid">
 
-    <input v-model="form.judul" placeholder="Judul">
+      <!-- KODE -->
+      <div class="form-group">
+        <label>Kode</label>
+        <input v-model="form.kode" placeholder="Masukkan Kode">
+      </div>
+      <!-- JUDUL -->
+      <div class="form-group">
+        <label>Judul</label>
+        <input v-model="form.judul" placeholder="Masukkan Judul">
+      </div>
+      <!-- KATEGORI -->
+      <div class="form-group">
+        <label>Kategori</label>
+        <select v-model="form.kategori">
+          <option value="" disabled style="color:#999;">Pilih Kategori</option>
+          <option v-for="k in kategoriList" :key="k" :value="k">
+            {{ k }}
+          </option>
+        </select>
+      </div>
+      <!-- UPBJJ -->
+      <div class="form-group">
+        <label>UPBJJ</label>
+        <select v-model="form.upbjj">
+          <option value="" disabled style="color:#999;">Pilih UPBJJ</option>
+          <option v-for="u in upbjjList" :key="u" :value="u">
+            {{ u }}
+          </option>
+        </select>
+      </div>
+      <!-- LOKASI RAK -->
+      <div class="form-group">
+        <label>Lokasi Rak</label>
+        <input v-model="form.lokasiRak" placeholder="Contoh: Rak A-01">
+      </div>
+      <!-- HARGA -->
+      <div class="form-group">
+        <label>Harga</label>
+        <input type="number" v-model.number="form.harga" placeholder="Masukkan Harga">
+      </div>
+      <!-- STOK -->
+      <div class="form-group">
+        <label>Jumlah Stok</label>
+        <input type="number" v-model.number="form.qty" placeholder="Masukkan Stok">
+      </div>
+      <!-- SAFETY -->
+      <div class="form-group">
+        <label>Safety Stock</label>
+        <input type="number" v-model.number="form.safety" placeholder="Minimal Stok">
+      </div>
+      <!-- CATATAN -->
+      <div class="form-group">
+        <label>Catatan</label>
+        <textarea v-model="form.catatanHTML" placeholder="Tambah Catatan..."></textarea>
+      </div>
 
-    <select v-model="form.kategori">
-      <option value="">Pilih Kategori</option>
-      <option v-for="k in kategoriList">
-        {{ k }}
-      </option>
-    </select>
+      <!-- FOOTER -->
+      <div class="modal-footer">
+        <button
+          class="btn-cancel"
+          @click="showForm = false">
+        Batal
+        </button>
 
-    <select v-model="form.upbjj">
-      <option value="">Pilih UPBJJ</option>
-      <option v-for="u in upbjjList">
-        {{ u }}
-      </option>
-    </select>
+        <button
+          class="btn-save"
+          @click="isEdit ? simpanEdit() : tambahData()">
 
-    <input
-      v-model="form.lokasiRak"
-      placeholder="Lokasi Rak"
-    >
-
-    <input
-      type="number"
-      v-model.number="form.harga"
-      placeholder="Harga"
-    >
-
-    <input
-      type="number"
-      v-model.number="form.qty"
-      placeholder="Jumlah Stok"
-    >
-
-    <input
-      type="number"
-      v-model.number="form.safety"
-      placeholder="Safety Stock"
-    >
-
-    <input
-      v-model="form.catatanHTML"
-      placeholder="Catatan"
-    >
-
-    <br>
-
-    <button
-      class="btn-primary"
-      @click="tambahData"
-    >
-      Simpan Data
-    </button>
-
+          {{ isEdit ? 'Update' : 'Simpan' }}
+        </button>
+    </div>
   </div>
-
-</div>
-
-  </div>
-
-</div>
 
 <script src="js/dataBahanAjar.js"></script>
 <script src="js/stok-app.js"></script>
