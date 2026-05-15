@@ -273,6 +273,26 @@ table th {
   width: 50px;
   margin-bottom: -20px;
 }
+/* ====================================
+   MENU BUTTON
+==================================== */
+.menu-btn {
+  width: 80px;
+  height: auto;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  padding: 12px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: #1e88e5;
+  color: #fff;
+
+  transition: 0.3s ease;
+}
 
 /* ====================================
    LOGOUT BUTTON
@@ -282,6 +302,9 @@ table th {
   bottom: 30px;
   left: 60px;
   right: 60px;
+
+  font-size: 14px;
+  font-weight: 600;
 
   padding: 12px;
 
@@ -512,6 +535,7 @@ table th {
   border-radius: 12px;
 
   font-size: 15px;
+  font-family: inherit;
 
   transition: 0.3s;
 }
@@ -532,7 +556,7 @@ table th {
 
 .form-group textarea {
   resize: none;
-  min-height: 90px;
+  min-height: 42px;
 }
 
 .full-width {
@@ -552,8 +576,11 @@ table th {
 
 .btn-save,
 .btn-cancel {
-  width: 90px;
+  width: 100px;
   height: 45px;
+
+  font-size: 14px;
+  font-weight: 600;
 
   padding: 12px 24px;
 
@@ -567,15 +594,11 @@ table th {
 .btn-save {
   background: #1e88e5;
 }
-
-.btn-save:hover {
-  background: #1ab4bc;
-}
-
 .btn-cancel {
   background: #95a5a6
 }
 
+.btn-save:hover,
 .btn-cancel:hover {
   background: #1ab4bc;
 }
@@ -789,11 +812,14 @@ table th {
 /* RESET BUTTON */
 
 .btn-reset {
-  width: 46px;
+  width: 90px;
   height: 46px;
 
   border: none;
   border-radius: 12px;
+
+  font-size: 14px;
+  font-weight: 600;
 
   background: #f59e0b;
   color: white;
@@ -805,7 +831,6 @@ table th {
 
 .btn-reset:hover {
   background: #d97706;
-  transform: rotate(90deg);
 }
 
 /* RESPONSIVE */
@@ -824,11 +849,6 @@ table th {
   .filter-action {
     margin-left: 0;
   }
-
-  .btn-reset {
-    width: 100%;
-  }
-
 }
 
 .check-btn {
