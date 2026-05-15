@@ -3,6 +3,7 @@
 <head>
   <title>Dashboard</title>
   <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body onload="checkLogin(); greeting()">
@@ -12,8 +13,8 @@
   <a href="stok.html">📦 Informasi Bahan Ajar</a>
   <a href="tracking.html">🚚 Tracking Pengiriman</a>
 
-   <div class="menu">
-    <a href="#">📊 Laporan ▸</a>
+  <div class="menu">
+     <a href="#">📊 Laporan ▸</a>
     <div class="submenu">
       <a href="#">Monitoring Progress DO</a>
       <a href="#">Rekap Bahan Ajar</a>
@@ -21,15 +22,16 @@
   </div>
   <a href="#">📁 Histori Transaksi Bahan Ajar</a>
 
-  <button onclick="logout()" class="logout-btn">
+  <button onclick="openLogoutModal()" class="btn-logout">
     <i class="fas fa-sign-out-alt"></i> Logout
   </button>
+
 </div>
 
 <div class="content">
-  <div class="navbar">
+   <div class="navbar">
     <span id="greet"></span>
-</div>
+   </div>
 
 <div class="card">
     <h3>Selamat Datang di Sistem SITTA-UT</h3>
@@ -41,22 +43,7 @@
     <button onclick="location.href='stok.html'" class="menu-btn">Stok</button>
     <button onclick="location.href='tracking.html'" class="menu-btn">Tracking</button>
 </div>
-
-<div id="logoutModal" class="modal-base modal-js">
-  <div class="modal-content">
-
-    <span class="modal-close" onclick="closeLogoutModal()">&times;</span>
-
-    <div style="text-align:center;">
-      <div style="font-size:40px;">⚠️</div>
-      <h3>Konfirmasi Logout</h3>
-      <p>Apakah anda ingin keluar?</p>
-
-      <button onclick="confirmLogout()" class="btn-yes">Ya</button>
-      <button onclick="closeLogoutModal()" class="btn-no">Tidak</button>
-    </div>
-
-  </div>
+</div>
 </div>
 
 <script src="js/script.js"></script>

@@ -180,6 +180,23 @@ button:hover {
   margin: 10px;
 }
 
+.btn-logout{
+  background: #e74c3c;
+  color: white;
+
+  border: none;
+  border-radius: 8px;
+
+  padding: 10px 16px;
+
+  cursor: pointer;
+
+  display: block;
+  margin: 0 auto;
+
+  transition: 0.3s ease;
+}
+
 /* ====================================
    INPUT & FORM
 ==================================== */

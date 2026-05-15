@@ -168,8 +168,31 @@ function closeLogoutModal() {
 }
 
 function confirmLogout() {
-  localStorage.clear();
+  localStorage.removeItem("loginUser");
   window.location.href = "index.html";
+}
+
+function openLogoutModal() {
+  Swal.fire({
+    icon: 'warning',
+    title: 'Konfirmasi Logout',
+    text: 'Apakah anda ingin keluar?',
+    
+    showCancelButton: true,
+
+    confirmButtonText: 'Ya',
+    cancelButtonText: 'Tidak',
+
+    confirmButtonColor: '#e74c3c',
+    cancelButtonColor: '#95a5a6'
+
+  }).then((result) => {
+
+    if (result.isConfirmed) {
+      confirmLogout();
+    }
+
+  });
 }
 
 document.getElementById("cover").addEventListener("change", function(event) {
