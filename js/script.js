@@ -33,28 +33,28 @@ function login() {
 
 // MODAL
 function showModal(type) {
-  let modal = document.getElementById("modal");
-  let text = document.getElementById("modalText");
-
   if (type === "lupa") {
-    text.innerHTML = `
-      <div style="text-align:center;">
-        <div style="font-size:40px;">⚠️</div>
-        <h3>Lupa Password</h3>
-        <p>Silakan hubungi admin untuk reset password.</p>
-      </div>
-    `;
+
+    Swal.fire({
+      icon: 'warning',
+      title: 'Lupa Password',
+      text: 'Silakan hubungi admin untuk reset password.',
+      confirmButtonText: 'Oke',
+      confirmButtonColor: '#f39c12'
+    });
+
   } else {
-    text.innerHTML = `
-      <div style="text-align:center;">
-        <div style="font-size:40px;">📝</div>
-        <h3>Daftar Akun</h3>
-        <p>Silakan hubungi admin untuk pendaftaran akun.</p>
-      </div>
-    `;
+
+    Swal.fire({
+      icon: 'info',
+      title: 'Daftar Akun',
+      text: 'Silakan hubungi admin untuk pendaftaran akun.',
+      confirmButtonText: 'Oke',
+      confirmButtonColor: '#3498db'
+    });
+
   }
 
-  modal.style.display = "flex";
 }
 
 function closeModal() {
