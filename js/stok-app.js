@@ -92,6 +92,68 @@ new Vue({
 
   methods: {
 
+    konfirmasiSimpan() {
+
+  // VALIDASI
+  if (
+    !this.form.kode ||
+    !this.form.judul ||
+    !this.form.kategori ||
+    !this.form.upbjj
+  ) {
+
+    Swal.fire({
+      icon: 'warning',
+      title: 'Data Belum Lengkap',
+      text: 'Silakan lengkapi semua field terlebih dahulu',
+      confirmButtonColor: '#f39c12'
+    });
+
+    return;
+  }
+
+  // KONFIRMASI
+  Swal.fire({
+    title: this.isEdit ? 'Update Data?' : 'Simpan Data?',
+    
+    icon: 'question',
+
+    showCancelButton: true,
+
+    confirmButtonText: this.isEdit ? 'Update' : 'Simpan',
+    cancelButtonText: 'Batal',
+
+    confirmButtonColor: '#3498db',
+    cancelButtonColor: '#95a5a6'
+
+  }).then((result) => {
+
+    if (result.isConfirmed) {
+
+      // SIMPAN DATA
+      if (this.isEdit) {
+        this.simpanEdit();
+      } else {
+        this.tambahData();
+      }
+
+      // SUCCESS
+      Swal.fire({
+        icon: "success",
+        title: this.isEdit
+          ? "Data Berhasil Diupdate"
+          : "Data Berhasil Disimpan",
+
+        confirmButtonText: "Oke",
+        confirmButtonColor: "#3085d6",
+      });
+
+    }
+
+  });
+
+},
+
     // =========================
     // OPEN FORM TAMBAH
     // =========================
@@ -148,25 +210,31 @@ new Vue({
     // =========================
     simpanEdit() {
 
-      // VALIDASI
-      if (
-        !this.form.kode ||
-        !this.form.judul ||
-        !this.form.kategori ||
-        !this.form.upbjj
-      ) {
+  // VALIDASI
+  if (
+    !this.form.kode ||
+    !this.form.judul ||
+    !this.form.kategori ||
+    !this.form.upbjj
+  ) {
 
-        alert('Data wajib diisi!');
-        return;
-      }
+    Swal.fire({
+      icon: 'warning',
+      title: 'Data Belum Lengkap',
+      text: 'Semua field wajib diisi',
+      confirmButtonColor: '#f39c12'
+    });
 
-        // CARI INDEX BERDASARKAN KODE
-      const index = this.stok.findIndex(
-      item => item.kode === this.editKode
-      );
+    return;
+  }
 
-      // UPDATE DATA
-      if (index !== -1) {
+  // CARI INDEX
+  const index = this.stok.findIndex(
+    item => item.kode === this.editKode
+  );
+
+  // UPDATE DATA
+  if (index !== -1) {
 
     this.stok.splice(index, 1, {
       ...this.form,
@@ -175,27 +243,59 @@ new Vue({
 
   }
 
-      alert('Data berhasil diupdate');
+  // SUCCESS
+  Swal.fire({
+    icon: 'success',
+    title: 'Data berhasil diupdate',
+    confirmButtonText: 'Oke',
+    confirmButtonColor: '#3085d6'
+  });
 
-      this.showForm = false;
+  this.showForm = false;
 
-      this.resetForm();
-    },
+  this.resetForm();
+},
 
     // =========================
     // HAPUS DATA
     // =========================
     hapusData(index) {
 
-      let konfirmasi = confirm(
-        'Yakin ingin menghapus data ini?'
-      );
+  Swal.fire({
+    title: 'Hapus Data?',
+    
+    text: 'Data yang dihapus tidak dapat dikembalikan',
 
-      if (konfirmasi) {
-        this.stok.splice(index, 1);
-      }
+    icon: 'warning',
 
-    },
+    showCancelButton: true,
+
+    confirmButtonText: 'Ya, Hapus',
+    cancelButtonText: 'Batal',
+
+    confirmButtonColor: '#e74c3c',
+    cancelButtonColor: '#95a5a6'
+
+  }).then((result) => {
+
+    if (result.isConfirmed) {
+
+      // HAPUS DATA
+      this.stok.splice(index, 1);
+
+      // SUCCESS
+      Swal.fire({
+        icon: 'success',
+        title: 'Data berhasil dihapus',
+        confirmButtonText: 'Oke',
+        confirmButtonColor: '#3085d6'
+      });
+
+    }
+
+  });
+
+},
 
     // =========================
     // STATUS TEXT
@@ -245,33 +345,43 @@ new Vue({
     // =========================
     tambahData() {
 
-      // VALIDASI
-      if (
-        !this.form.kode ||
-        !this.form.judul ||
-        !this.form.kategori ||
-        !this.form.upbjj
-      ) {
+  // VALIDASI
+  if (
+    !this.form.kode ||
+    !this.form.judul ||
+    !this.form.kategori ||
+    !this.form.upbjj
+  ) {
 
-        alert('Data wajib diisi!');
-        return;
-      }
+    Swal.fire({
+      icon: 'warning',
+      title: 'Data Belum Lengkap',
+      text: 'Semua field wajib diisi',
+      confirmButtonColor: '#f39c12'
+    });
 
-      // PUSH DATA
-      this.stok.push({
-        ...this.form,
-        edit: false
-      });
+    return;
+  }
 
-      alert('Data berhasil ditambahkan');
+  // PUSH DATA
+  this.stok.push({
+    ...this.form,
+    edit: false
+  });
 
-      this.showForm = false;
+  // SUCCESS
+  Swal.fire({
+    icon: 'success',
+    title: 'Data berhasil ditambahkan',
+    confirmButtonText: 'Oke',
+    confirmButtonColor: '#3085d6'
+  });
 
-      this.resetForm();
+  this.showForm = false;
 
-    },
+  this.resetForm();
 
-    // =========================
+},    // =========================
     // RESET FORM
     // =========================
     resetForm() {

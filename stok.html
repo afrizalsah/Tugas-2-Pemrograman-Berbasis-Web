@@ -7,6 +7,7 @@
   <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 
   <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
@@ -326,7 +327,7 @@
 
         <button
           class="btn-save"
-          @click="isEdit ? simpanEdit() : tambahData()">
+          @click="konfirmasiSimpan">
 
           {{ isEdit ? 'Update' : 'Simpan' }}
         </button>

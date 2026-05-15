@@ -95,7 +95,7 @@ const app = createApp({
                 Swal.fire({
                     icon: "warning",
                     title: "Data Belum Lengkap",
-                    text: "Lengkapi semua kolom sudah diisi sebelum menyimpan.",
+                    text: "Silakan lengkapi semua field terlebih dahulu",
                     confirmButtonColor: "#f39c12"
                 });
                 return;
