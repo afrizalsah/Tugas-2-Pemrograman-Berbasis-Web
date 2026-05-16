@@ -570,10 +570,15 @@ table th {
   background: #fff;
 }
 
+.form-group select.has-value,
+.filter-group select.has-value {
+  color: #000000 !important;
+}
+
 /* OPTION STYLE */
 .form-group select option,
 .filter-group select option {
-  color: #5f6b7a;
+  color: #000000;
   background: #fff;
 }
 

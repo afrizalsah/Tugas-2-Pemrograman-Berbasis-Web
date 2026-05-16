@@ -6,7 +6,7 @@
   <title>Tracking Delivery Order</title>
   <link rel="stylesheet" href="css/style.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
 <body>
@@ -50,8 +50,8 @@
 
             <div class="form-group">
                 <label>Ekspedisi</label>
-                <select v-model="newDO.ekspedisi">
-                    <option disabled value="">
+                <select v-model="newDO.ekspedisi" :class="{ 'has-value': newDO.ekspedisi !== '' }">
+                    <option disabled selected hidden value="">
                         Pilih Ekspedisi
                     </option>
 
@@ -66,8 +66,8 @@
             <div class="form-group">
                 <label>Paket Bahan Ajar</label>
 
-                <select v-model="newDO.paket">
-                    <option disabled value="">
+                <select v-model="newDO.paket" :class="{ 'has-value': newDO.paket !== '' }">
+                    <option disabled selected hidden value="">
                         Pilih Paket
                     </option>
 
@@ -112,6 +112,7 @@
         <div class="button-area">
             <button type="submit"
                     class="submit-btn">
+                    <i class="fa-solid fa-plus"></i>
                  Tambah DO Baru
             </button>
         </div>
@@ -156,7 +157,7 @@
                       <button 
                         class="check-btn"
                           @click="showPerjalanan(item)">
-                            Check
+                            <i class="fa-solid fa-eye"></i> Check
                       </button>
                     </td>
                     </tr>
