@@ -1,175 +1,155 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tracking Delivery Order</title>
+
   <link rel="stylesheet" href="css/style.css">
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <script src="https://unpkg.com/vue@3.4.38/dist/vue.global.prod.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
+
 <div id="trackingApp">
 
-<div class="sidebar">
-  <a href="dashboard.html">🏠 Dashboard</a>
-</div>
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <a href="dashboard.html">🏠 Dashboard</a>
+  </div>
 
-<div class="content">
-  <div class="card">
-    <div class="card-header">
+  <div class="content">
+
+    <!-- ========================
+         FORM INPUT DO
+    ========================= -->
+    <div class="card">
+      <div class="card-header">
         <h2>Tracking Pengiriman</h2>
         <p>Form input delivery order bahan ajar</p>
-    </div>
+      </div>
 
-    <form @submit.prevent="submitDO" class="form-do">
+      <form @submit.prevent="submitDO" class="form-do">
 
         <div class="form-grid">
 
-            <div class="form-group">
-                <label>Nomor DO</label>
-                <input type="text"
-                       v-model="newDO.nomorDO"
-                       disabled />
-            </div>
+          <div class="form-group">
+            <label>Nomor DO</label>
+            <input type="text" v-model="newDO.nomorDO" disabled />
+          </div>
 
-            <div class="form-group">
-                <label>NIM</label>
-                <input type="text"
-                       v-model="newDO.nim"
-                       placeholder="Masukkan NIM" />
-            </div>
+          <div class="form-group">
+            <label>NIM</label>
+            <input type="text" v-model="newDO.nim" placeholder="Masukkan NIM" />
+          </div>
 
-            <div class="form-group">
-                <label>Nama Mahasiswa</label>
-                <input type="text"
-                       v-model="newDO.nama"
-                       placeholder="Masukkan nama" />
-            </div>
+          <div class="form-group">
+            <label>Nama Mahasiswa</label>
+            <input type="text" v-model="newDO.nama" placeholder="Masukkan nama" />
+          </div>
 
-            <div class="form-group">
-                <label>Ekspedisi</label>
-                <select v-model="newDO.ekspedisi" :class="{ 'has-value': newDO.ekspedisi !== '' }">
-                    <option disabled selected hidden value="">
-                        Pilih Ekspedisi
-                    </option>
+          <div class="form-group">
+            <label>Ekspedisi</label>
+            <select v-model="newDO.ekspedisi" :class="{ 'has-value': newDO.ekspedisi !== '' }">
+              <option disabled selected hidden value="">Pilih Ekspedisi</option>
+              <option v-for="(exp, i) in pengirimanList" :key="i" :value="exp">
+                {{ exp.kode }} - {{ exp.nama }}
+              </option>
+            </select>
+          </div>
 
-                    <option v-for="(exp, i) in pengirimanList"
-                            :key="i"
-                            :value="exp">
-                        {{ exp.kode }} - {{ exp.nama }}
-                    </option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label>Paket Bahan Ajar</label>
+          <div class="form-group">
+            <label>Paket Bahan Ajar</label>
+            <select v-model="newDO.paket" :class="{ 'has-value': newDO.paket !== '' }">
+              <option disabled selected hidden value="">Pilih Paket</option>
+              <option v-for="(p, i) in paketList" :key="i" :value="p.kode">
+                {{ p.kode }} - {{ p.nama }}
+              </option>
+            </select>
+          </div>
 
-                <select v-model="newDO.paket" :class="{ 'has-value': newDO.paket !== '' }">
-                    <option disabled selected hidden value="">
-                        Pilih Paket
-                    </option>
-
-                    <option v-for="(p, i) in paketList"
-                            :key="i"
-                            :value="p.kode">
-                        {{ p.kode }} - {{ p.nama }}
-                    </option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>Tanggal Kirim</label>
-
-                <input type="date"
-                       v-model="newDO.tanggalKirim" />
-            </div>
+          <div class="form-group">
+            <label>Tanggal Kirim</label>
+            <input type="date" v-model="newDO.tanggalKirim" :class="{ 'date-filled': newDO.tanggalKirim }" />
+          </div>
 
         </div>
 
         <!-- DETAIL PAKET -->
-
-        <div v-if="selectedPaket"
-             class="paket-detail">
-
-            <div class="paket-header">
-                <h4>Detail Isi Paket</h4>
-
-                <span class="harga-paket">
-                    Rp {{ selectedPaket.harga.toLocaleString('id-ID') }}
-                </span>
-            </div>
-
-            <ol>
-                <li v-for="(item, i) in selectedPaket.isi"
-                    :key="i">
-                    {{ item }}
-                </li>
-            </ol>
+        <div v-if="selectedPaket" class="paket-detail">
+          <div class="paket-header">
+            <h4>Detail Isi Paket</h4>
+            <span class="harga-paket">
+              Rp {{ selectedPaket.harga.toLocaleString('id-ID') }}
+            </span>
+          </div>
+          <ol>
+            <li v-for="(item, i) in selectedPaket.isi" :key="i">{{ item }}</li>
+          </ol>
         </div>
 
+        <!-- TOMBOL SUBMIT -->
         <div class="button-area">
-            <button type="submit"
-                    class="submit-btn">
-                    <i class="fa-solid fa-plus"></i>
-                 Tambah DO Baru
-            </button>
+          <button type="submit" class="submit-btn">
+            <i class="fa-solid fa-plus"></i> Tambah DO Baru
+          </button>
         </div>
 
-    </form>
+      </form>
+    </div>
+
+    <!-- ========================
+         TABEL TRACKING DO
+    ========================= -->
+    <div class="card tracking-table">
+      <h3>Daftar Tracking DO</h3>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Nomor DO</th>
+            <th>NIM</th>
+            <th>Nama</th>
+            <th>Ekspedisi</th>
+            <th>Paket</th>
+            <th>Tanggal Kirim</th>
+            <th>Total</th>
+            <th>Perjalanan</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr v-for="(item, key) in trackingList" :key="key">
+            <td>{{ key }}</td>
+            <td>{{ item.nim }}</td>
+            <td>{{ item.nama }}</td>
+            <td>
+              <span v-if="typeof item.ekspedisi === 'object'">
+                {{ item.ekspedisi.kode }} - {{ item.ekspedisi.nama }}
+              </span>
+              <span v-else>{{ item.ekspedisi }}</span>
+            </td>
+            <td>{{ item.paket }}</td>
+            <td>{{ item.tanggalKirim }}</td>
+            <td>Rp {{ item.total.toLocaleString('id-ID') }}</td>
+            <td>
+              <button class="check-btn" @click="showPerjalanan(item)">
+                <i class="fa-solid fa-eye"></i> Check
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+  </div>
 </div>
 
-        <div class="tracking-table">
-            <h3>Daftar Tracking DO</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Nomor DO</th>
-                        <th>NIM</th>
-                        <th>Nama</th>
-                        <th>Ekspedisi</th>
-                        <th>Paket</th>
-                        <th>Tanggal Kirim</th>
-                        <th>Total</th>
-                        <th>Perjalanan</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(item, key) in trackingList" :key="key">
-                    <td>{{ key }}</td>
-                    <td>{{ item.nim }}</td>
-                    <td>{{ item.nama }}</td>
-                    <td>
-                         <span v-if="typeof item.ekspedisi === 'object'">
-                        {{ item.ekspedisi.kode }} - {{ item.ekspedisi.nama }}
-                        </span>
-
-                        <span v-else>
-                        {{ item.ekspedisi }}
-                        </span>
-                    </td>
-                    <td>{{ item.paket }}</td>
-                    <td>{{ item.tanggalKirim }}</td>
-                    <td>Rp {{ item.total.toLocaleString('id-ID') }}</td>
-
-                    <td>
-                      <button 
-                        class="check-btn"
-                          @click="showPerjalanan(item)">
-                            <i class="fa-solid fa-eye"></i> Check
-                      </button>
-                    </td>
-                    </tr>
-                </tbody>
-        </table>
-  </div>      
-  </div>  
-</div>
-
-<div id="trackingResult" class="tracking-result"></div>
-
-<script src="https://unpkg.com/vue@3.4.38/dist/vue.global.prod.js"></script>
 <script src="js/dataBahanAjar.js"></script>
 <script src="js/tracking-app.js"></script>
 

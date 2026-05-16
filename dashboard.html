@@ -1,51 +1,69 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
+
 <head>
-  <title>Dashboard</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - SITTA-UT</title>
+
   <link rel="stylesheet" href="css/style.css">
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
+
 <body onload="checkLogin(); greeting()">
 
+<!-- SIDEBAR -->
 <div class="sidebar">
-  <h3 style="text-align:center;">DashBoard SITTA-UT</h3>
+  <h3 style="text-align:center;">SITTA-UT</h3>
+
   <a href="stok.html">📦 Informasi Bahan Ajar</a>
   <a href="tracking.html">🚚 Tracking Pengiriman</a>
 
   <div class="menu">
-     <a href="#">📊 Laporan ▸</a>
+    <a href="#">📊 Laporan ▸</a>
     <div class="submenu">
       <a href="#">Monitoring Progress DO</a>
       <a href="#">Rekap Bahan Ajar</a>
     </div>
   </div>
-  <a href="#">📁 Histori Transaksi Bahan Ajar</a>
 
-  <button onclick="openLogoutModal()" class="btn-logout">
+  <a href="#">📁 Histori Transaksi</a>
+
+  <button class="btn-logout" onclick="openLogoutModal()">
     <i class="fas fa-sign-out-alt"></i> Logout
   </button>
-
 </div>
 
+<!-- CONTENT -->
 <div class="content">
-   <div class="navbar">
-    <span id="greet"></span>
-   </div>
 
-<div class="card">
+  <div class="navbar">
+    <span id="greet"></span>
+  </div>
+
+  <!-- WELCOME -->
+  <div class="card">
     <h3>Selamat Datang di Sistem SITTA-UT</h3>
     <p>Kelola pemesanan bahan ajar dengan mudah.</p>
-</div>
+  </div>
 
-<div class="card">
+  <!-- MENU CEPAT -->
+  <div class="card">
     <h3>Menu Cepat</h3>
-    <button onclick="location.href='stok.html'" class="menu-btn">Stok</button>
-    <button onclick="location.href='tracking.html'" class="menu-btn">Tracking</button>
-</div>
-</div>
+    <button class="menu-btn" onclick="location.href='stok.html'">
+      <i class="fa-solid fa-boxes-stacked"></i> Stok
+    </button>
+    <button class="menu-btn" onclick="location.href='tracking.html'">
+      <i class="fa-solid fa-truck"></i> Tracking
+    </button>
+  </div>
+
 </div>
 
+<script src="js/dataBahanAjar.js"></script>
 <script src="js/script.js"></script>
+
 </body>
 </html>

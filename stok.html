@@ -1,136 +1,103 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Stok Bahan Ajar UT</title>
 
-  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
-
   <link rel="stylesheet" href="css/style.css">
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
 
 <div id="app">
 
+  <!-- SIDEBAR -->
   <div class="sidebar">
     <a href="dashboard.html">🏠 Dashboard</a>
   </div>
 
   <div class="content">
 
-  <!-- FILTER CARD -->
-<div class="card filter-card">
+    <!-- ========================
+         FILTER CARD
+    ========================= -->
+    <div class="card filter-card">
+      <div class="filter-container">
 
-  <div class="filter-container">
+        <!-- FILTER UT DAERAH -->
+        <div class="filter-group">
+          <label>UT Daerah</label>
+          <div class="input-icon">
+            <i class="fa-solid fa-building-columns"></i>
+            <select v-model="filterUpbjj" :class="{ 'has-value': filterUpbjj !== '' }">
+              <option value="" disabled selected hidden>Filter</option>
+              <option v-for="u in upbjjList" :key="u">{{ u }}</option>
+            </select>
+          </div>
+        </div>
 
-    <!-- FILTER UT -->
-    <div class="filter-group">
-      <label>UT Daerah</label>
+        <!-- FILTER KATEGORI -->
+        <div class="filter-group" v-if="filterUpbjj">
+          <label>Kategori</label>
+          <div class="input-icon">
+            <i class="fa-solid fa-layer-group"></i>
+            <select v-model="filterKategori" :class="{ 'has-value': filterKategori !== '' }">
+              <option value="" disabled selected hidden>Filter</option>
+              <option v-for="k in kategoriList" :key="k">{{ k }}</option>
+            </select>
+          </div>
+        </div>
 
-      <div class="input-icon">
-        <i class="fa-solid fa-building-columns"></i>
+        <!-- SORT -->
+        <div class="filter-group">
+          <label>Urutkan</label>
+          <div class="input-icon">
+            <i class="fa-solid fa-arrow-down-wide-short"></i>
+            <select v-model="sortBy" :class="{ 'has-value': sortBy !== '' }">
+              <option value="" disabled selected hidden>Sort By</option>
+              <option value="judul">Judul</option>
+              <option value="qty">Jumlah Stok</option>
+              <option value="harga">Harga</option>
+            </select>
+          </div>
+        </div>
 
-        <select v-model="filterUpbjj" :class="{ 'has-value': filterUpbjj !== '' }">
-          <option value="" disabled selected hidden>Filter</option>
+        <!-- CHECKBOX WARNING -->
+        <div class="filter-check">
+          <label class="checkbox-modern">
+            <input type="checkbox" v-model="onlyWarning">
+            <span class="checkmark"></span>
+            <span class="checkbox-text">Hanya stok menipis / kosong</span>
+          </label>
+        </div>
 
-          <option
-            v-for="u in upbjjList"
-            :key="u"
-          >
-            {{ u }}
-          </option>
-        </select>
-      </div>
-    </div>
-
-    <!-- FILTER KATEGORI -->
-    <div
-      class="filter-group"
-      v-if="filterUpbjj"
-    >
-      <label>Kategori</label>
-
-      <div class="input-icon">
-        <i class="fa-solid fa-layer-group"></i>
-
-        <select v-model="filterKategori" :class="{ 'has-value': filterKategori !== '' }">
-          <option value="" disabled selected hidden>Filter</option>
-
-          <option
-            v-for="k in kategoriList"
-            :key="k"
-          >
-            {{ k }}
-          </option>
-        </select>
-      </div>
-    </div>
-
-    <!-- SORT -->
-    <div class="filter-group">
-      <label>Urutkan</label>
-
-      <div class="input-icon">
-        <i class="fa-solid fa-arrow-down-wide-short"></i>
-
-        <select v-model="sortBy" :class="{ 'has-value': sortBy !== '' }">
-          <option value="" disabled selected hidden>Sort By</option>
-          <option value="judul">Judul</option>
-          <option value="qty">Jumlah Stok</option>
-          <option value="harga">Harga</option>
-        </select>
-      </div>
-    </div>
-
-    <!-- CHECKBOX -->
-    <div class="filter-check">
-      <label class="checkbox-modern">
-
-        <input
-          type="checkbox"
-          v-model="onlyWarning"
-        >
-
-        <span class="checkmark"></span>
-
-        <span class="checkbox-text">
-          Hanya stok menipis / kosong
-        </span>
-
-      </label>
-    </div>
-
-    <!-- RESET -->
-    <div class="filter-action">
-      <button
-        class="btn-reset"
-        @click="resetFilter"
-      >
-        <i class="fa-solid fa-rotate-left"></i>
-        Reset
-      </button>
-    </div>
-
-  </div>
-
-</div>
-
-    <!-- TABEL -->
-    <div class="card">
-        <div class="header-flex">
-          <h2>Stok Bahan Ajar UT</h2>
-
-          <button
-            class="btn-primary"
-            @click="openTambahForm"
-          >
-          <i class="fa-solid fa-plus"></i>
-            Tambah Data
+        <!-- RESET FILTER -->
+        <div class="filter-action">
+          <button class="btn-reset" @click="resetFilter">
+            <i class="fa-solid fa-rotate-left"></i> Reset
           </button>
         </div>
+
+      </div>
+    </div>
+
+    <!-- ========================
+         TABEL STOK
+    ========================= -->
+    <div class="card">
+
+      <div class="header-flex">
+        <h2>Stok Bahan Ajar UT</h2>
+        <button class="btn-primary" @click="openTambahForm">
+          <i class="fa-solid fa-plus"></i> Tambah Data
+        </button>
+      </div>
 
       <table>
         <thead>
@@ -150,7 +117,7 @@
         </thead>
 
         <tbody>
-          <tr v-for="(item,index) in filteredData" :key="index">
+          <tr v-for="(item, index) in filteredData" :key="index">
 
             <td>{{ item.kode }}</td>
 
@@ -160,182 +127,138 @@
             </td>
 
             <td>{{ item.kategori }}</td>
-
             <td>{{ item.upbjj }}</td>
-
             <td>{{ item.lokasiRak }}</td>
 
-            <td>
-              Rp {{ item.harga.toLocaleString() }}
-            </td>
+            <td>Rp {{ item.harga.toLocaleString() }}</td>
 
             <td>
-              <input
-                v-if="item.edit"
-                type="number"
-                v-model.number="item.qty"
-                style="width:70px"
-              >
-
-              <span v-else>
-                {{ item.qty }}
-              </span>
+              <input v-if="item.edit" type="number" v-model.number="item.qty" style="width:70px">
+              <span v-else>{{ item.qty }}</span>
             </td>
 
             <td>{{ item.safety }}</td>
 
             <td>
-              <span
-                :class="getStatusClass(item)"
-              >
-                {{ getStatusText(item) }}
-              </span>
+              <span :class="getStatusClass(item)">{{ getStatusText(item) }}</span>
             </td>
 
             <td v-html="item.catatanHTML"></td>
 
             <td>
-                 <!-- MODE NORMAL -->
-                <div v-if="!item.edit">
-
-                <button
-                class="btn-primary btn-icon"
-                @click="editData(item)"
-                >
+              <!-- MODE NORMAL -->
+              <div v-if="!item.edit">
+                <button class="btn-primary btn-icon" @click="editData(item)">
                   <i class="fa-solid fa-pen-to-square"></i>
                 </button>
-
-                <button
-                class="btn-danger btn-icon"
-                @click="hapusData(index)"
-                >
+                <button class="btn-danger btn-icon" @click="hapusData(index)">
                   <i class="fa-solid fa-trash"></i>
                 </button>
+              </div>
 
-                </div>
-
-                <!-- MODE EDIT -->
-                <div v-else>
-
-                <button
-                class="btn-primary btn-icon"
-                @click="editData(item, index)"
-                >
+              <!-- MODE EDIT -->
+              <div v-else>
+                <button class="btn-primary btn-icon" @click="editData(item, index)">
                   <i class="fa-solid fa-save"></i>
                 </button>
-
-                <button
-                class="btn-warning btn-icon"
-                @click="batalEdit(item)"
-                >
+                <button class="btn-warning btn-icon" @click="batalEdit(item)">
                   <i class="fa-solid fa-times"></i>
                 </button>
-
-                </div>
-
+              </div>
             </td>
 
           </tr>
         </tbody>
-
       </table>
+
     </div>
 
-<!-- MODAL TAMBAH DATA -->
-<div
-  class="modal-base modal-vue"
-  v-if="showForm">
+    <!-- ========================
+         MODAL TAMBAH / EDIT
+    ========================= -->
+    <div class="modal-base modal-vue" v-if="showForm">
+      <div class="modal-content modal-form">
 
-  <div class="modal-content modal-form">
+        <!-- HEADER -->
+        <div class="modal-header">
+          <h2>{{ isEdit ? 'Edit Data Bahan Ajar' : 'Tambah Data Bahan Ajar' }}</h2>
+          <button class="modal-btn-close" @click="showForm = false">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
 
-    <div class="modal-header">
-      <h2>{{ isEdit ? 'Edit Data Bahan Ajar' : 'Tambah Data Bahan Ajar' }}</h2>
+        <!-- FORM -->
+        <div class="form-grid">
 
-      <button
-        class="modal-btn-close"
-        @click="showForm = false"
-      >
-        <i class="fa-solid fa-xmark"></i>
-      </button>
+          <div class="form-group">
+            <label>Kode</label>
+            <input v-model="form.kode" placeholder="Masukkan Kode">
+          </div>
+
+          <div class="form-group">
+            <label>Judul</label>
+            <input v-model="form.judul" placeholder="Masukkan Judul">
+          </div>
+
+          <div class="form-group">
+            <label>Kategori</label>
+            <select v-model="form.kategori" :class="{ 'has-value': form.kategori !== '' }">
+              <option value="" disabled selected hidden>Pilih Kategori</option>
+              <option v-for="k in kategoriList" :key="k" :value="k">{{ k }}</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>UPBJJ</label>
+            <select v-model="form.upbjj" :class="{ 'has-value': form.upbjj !== '' }">
+              <option value="" disabled selected hidden>Pilih UPBJJ</option>
+              <option v-for="u in upbjjList" :key="u" :value="u">{{ u }}</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Lokasi Rak</label>
+            <input v-model="form.lokasiRak" placeholder="Contoh: Rak A-01">
+          </div>
+
+          <div class="form-group">
+            <label>Harga</label>
+            <input type="number" v-model.number="form.harga" placeholder="Masukkan Harga">
+          </div>
+
+          <div class="form-group">
+            <label>Jumlah Stok</label>
+            <input type="number" v-model.number="form.qty" placeholder="Masukkan Stok">
+          </div>
+
+          <div class="form-group">
+            <label>Safety Stock</label>
+            <input type="number" v-model.number="form.safety" placeholder="Minimal Stok">
+          </div>
+
+          <div class="form-group full-width">
+            <label>Catatan</label>
+            <textarea v-model="form.catatanHTML" placeholder="Tambah Catatan..."></textarea>
+          </div>
+
+        </div>
+
+        <!-- FOOTER -->
+        <div class="modal-footer">
+          <button class="btn-cancel" @click="resetForm">
+            <i class="fa-solid fa-rotate-left"></i> Reset
+          </button>
+          <button class="btn-save" @click="konfirmasiSimpan">
+            <i class="fa-solid fa-floppy-disk"></i>
+            {{ isEdit ? 'Update' : 'Simpan' }}
+          </button>
+        </div>
+
+      </div>
     </div>
 
-    
-    <div class="form-grid">
-
-      <!-- KODE -->
-      <div class="form-group">
-        <label>Kode</label>
-        <input v-model="form.kode" placeholder="Masukkan Kode">
-      </div>
-      <!-- JUDUL -->
-      <div class="form-group">
-        <label>Judul</label>
-        <input v-model="form.judul" placeholder="Masukkan Judul">
-      </div>
-      <!-- KATEGORI -->
-      <div class="form-group">
-        <label>Kategori</label>
-        <select v-model="form.kategori" :class="{ 'has-value': form.kategori !== '' }">
-          <option value="" disabled selected hidden>Pilih Kategori</option>
-          <option v-for="k in kategoriList" :key="k" :value="k">
-            {{ k }}
-          </option>
-        </select>
-      </div>
-      <!-- UPBJJ -->
-      <div class="form-group">
-        <label>UPBJJ</label>
-        <select v-model="form.upbjj" :class="{ 'has-value': form.upbjj !== '' }">
-          <option value="" disabled selected hidden>Pilih UPBJJ</option>
-          <option v-for="u in upbjjList" :key="u" :value="u">
-            {{ u }}
-          </option>
-        </select>
-      </div>
-      <!-- LOKASI RAK -->
-      <div class="form-group">
-        <label>Lokasi Rak</label>
-        <input v-model="form.lokasiRak" placeholder="Contoh: Rak A-01">
-      </div>
-      <!-- HARGA -->
-      <div class="form-group">
-        <label>Harga</label>
-        <input type="number" v-model.number="form.harga" placeholder="Masukkan Harga">
-      </div>
-      <!-- STOK -->
-      <div class="form-group">
-        <label>Jumlah Stok</label>
-        <input type="number" v-model.number="form.qty" placeholder="Masukkan Stok">
-      </div>
-      <!-- SAFETY -->
-      <div class="form-group">
-        <label>Safety Stock</label>
-        <input type="number" v-model.number="form.safety" placeholder="Minimal Stok">
-      </div>
-      <!-- CATATAN -->
-      <div class="form-group">
-        <label>Catatan</label>
-        <textarea v-model="form.catatanHTML" placeholder="Tambah Catatan..."></textarea>
-      </div>
-
-      <!-- FOOTER -->
-      <div class="modal-footer">
-        <button
-          class="btn-cancel"
-          @click="openTambahForm()">
-          <i class="fa-solid fa-rotate-left"></i>
-        Reset
-        </button>
-
-        <button
-          class="btn-save"
-          @click="konfirmasiSimpan">
-          <i class="fa-solid fa-floppy-disk"></i>
-
-          {{ isEdit ? 'Update' : 'Simpan' }}
-        </button>
-    </div>
   </div>
+</div>
 
 <script src="js/dataBahanAjar.js"></script>
 <script src="js/stok-app.js"></script>
