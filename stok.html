@@ -102,6 +102,19 @@
       </div>
 
       <table>
+          <colgroup>
+            <col style="width: 8%">    <!-- Kode -->
+            <col style="width: 18%">   <!-- Judul -->
+            <col style="width: 12%">    <!-- Kategori -->
+            <col style="width: 8%">    <!-- UPBJJ -->
+            <col style="width: 8%">    <!-- Lokasi Rak -->
+            <col style="width: 9%">    <!-- Harga -->
+            <col style="width: 5%">    <!-- Qty -->
+            <col style="width: 6%">    <!-- Safety -->
+            <col style="width: 10%">    <!-- Status -->
+            <col style="width: 17%">   <!-- Catatan -->
+            <col style="width: 8%">    <!-- Aksi -->
+          </colgroup>
         <thead>
           <tr>
             <th>Kode</th>
@@ -121,33 +134,33 @@
         <tbody>
           <tr v-for="(item, index) in filteredData" :key="index">
 
-            <td>{{ item.kode }}</td>
+            <td class="col-nowrap">{{ item.kode }}</td>
 
-            <td>
+            <td class="col-wrap">
               <input v-if="item.edit" v-model="item.judul">
               <span v-else>{{ item.judul }}</span>
             </td>
 
-            <td>{{ item.kategori }}</td>
-            <td>{{ item.upbjj }}</td>
-            <td>{{ item.lokasiRak }}</td>
+            <td class="col-nowrap">{{ item.kategori }}</td>
+            <td class="col-nowrap">{{ item.upbjj }}</td>
+            <td class="col-nowrap">{{ item.lokasiRak }}</td>
 
-            <td>Rp {{ item.harga.toLocaleString() }}</td>
+            <td class="col-nowrap">Rp {{ item.harga.toLocaleString() }}</td>
 
-            <td>
+            <td class="col-nowrap">
               <input v-if="item.edit" type="number" v-model.number="item.qty" style="width:70px">
               <span v-else>{{ item.qty }}</span>
             </td>
 
-            <td>{{ item.safety }}</td>
+            <td class="col-nowrap">{{ item.safety }}</td>
 
-            <td>
+            <td class="col-nowrap">
               <span :class="getStatusClass(item)">{{ getStatusText(item) }}</span>
             </td>
 
-            <td v-html="item.catatanHTML"></td>
+            <td class="col-wrap" v-html="item.catatanHTML"></td>
 
-            <td>
+            <td class="col-nowrap">
               <!-- MODE NORMAL -->
               <div v-if="!item.edit">
                 <button class="btn-primary btn-icon" @click="editData(item)">
@@ -220,7 +233,7 @@
 
           <div class="form-group">
             <label>Lokasi Rak</label>
-            <input v-model="form.lokasiRak" placeholder="Contoh: Rak A-01">
+            <input v-model="form.lokasiRak" placeholder="Contoh: R1-A1">
           </div>
 
           <div class="form-group">

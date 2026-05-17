@@ -210,7 +210,7 @@ button:hover {
 .btn-save,
 .btn-cancel {
   width: 100px;
-  height: 45px;
+  height: 50px;
 
   font-size: 14px;
   font-weight: 600;
@@ -260,8 +260,8 @@ button:hover {
 }
 
 .btn-icon {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
 
   padding: 0;
 
@@ -641,6 +641,7 @@ table {
   margin-top: 15px;
 
   border-collapse: collapse;
+  table-layout: fixed;
 }
 
 table th,
@@ -650,13 +651,25 @@ table td {
   border: 1px solid #dde1e7;
 
   font-size: 14px;
+  vertical-align: middle;
+  text-align: center;
 }
 
 table th {
   background: #1e3a5f;
   color: #fff;
+  white-space: nowrap;
 }
 
+table td.col-wrap {
+  word-break: break-word;
+  white-space: normal;
+}
+
+table td.col-nowrap {
+  white-space: nowrap;
+  text-align: center;
+}
 /* ====================================
    LOGIN
 ==================================== */
@@ -687,7 +700,7 @@ table th {
 
 .login-box form button[type="submit"] {
   display: block;
-  width: 40%;        /* sesuaikan sesuai selera */
+  width: 30%;        /* sesuaikan sesuai selera */
   box-sizing: border-box;
   margin: 8px auto;  /* auto agar tetap di tengah */
 }
