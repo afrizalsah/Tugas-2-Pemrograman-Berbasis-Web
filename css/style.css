@@ -708,8 +708,32 @@ table th {
 }
 
 .login-box form .input-wrapper input {
-  width: 240px;   /* sesuaikan ukuran box */
+  width: 240px;
+  box-sizing: border-box;
   margin: 0;
+  padding-right: 36px;
+}
+
+.password-wrapper {
+  position: relative;
+  width: 240px;
+}
+
+.password-wrapper input {
+  width: 100%;
+  box-sizing: border-box;
+  padding-right: 36px;
+}
+
+#togglePassword {
+  display: none;
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #aaa;
+  font-size: 14px;
 }
 /* ====================================
    STATUS BADGE
