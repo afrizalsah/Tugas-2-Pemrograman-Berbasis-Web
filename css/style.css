@@ -678,6 +678,39 @@ table th {
   margin-bottom: -20px;
 }
 
+.login-box form input {
+  display: block;
+  width: 80%;
+  box-sizing: border-box;
+  margin: 8px auto;
+}
+
+.login-box form button[type="submit"] {
+  display: block;
+  width: 40%;        /* sesuaikan sesuai selera */
+  box-sizing: border-box;
+  margin: 8px auto;  /* auto agar tetap di tengah */
+}
+
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 8px 0;
+}
+
+.input-wrapper i {
+  font-size: 16px;
+  color: #aaa;
+  width: 20px;
+  text-align: center;
+}
+
+.login-box form .input-wrapper input {
+  width: 240px;   /* sesuaikan ukuran box */
+  margin: 0;
+}
 /* ====================================
    STATUS BADGE
 ==================================== */

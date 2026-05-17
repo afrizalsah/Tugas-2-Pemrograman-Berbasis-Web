@@ -2,40 +2,47 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login SITTA</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
 
-<div class="login-box">
-  <img src="assets/img/logo-ut.png" class="login-logo">
+  <div class="login-box">
+    <img src="assets/img/logo-ut.png" alt="Logo Universitas Terbuka" class="login-logo">
 
-  <h2>SITTA UT</h2>
+    <h2>SITTA UT</h2>
 
-<form onsubmit="return login()">
-  <input type="email" id="email" placeholder="Email" required><br>
-  <input type="password" id="password" placeholder="Password" required><br>
-  <button type="submit">
-    <i class="fas fa-sign-in-alt"></i> Login
-  </button>
-</form>
+    <form onsubmit="return login()">
+      <div class="input-wrapper">
+        <i class="fas fa-envelope"></i>
+        <input type="email" id="email" placeholder="Email" required>
+      </div>
+      <div class="input-wrapper">
+        <i class="fas fa-lock"></i>
+        <input type="password" id="password" placeholder="Password" required>
+      </div>
+        <button type="submit">
+          <i class="fas fa-sign-in-alt"></i> Login
+        </button>
+    </form>
 
-<div id="notif" class="notif"></div>
+    <div id="notif" class="notif"></div>
 
-<div class="link-container">
-  <p class="link-text" onclick="showModal('lupa')">
-    <i class="fas fa-question-circle"></i> Lupa Password?
-  </p>
-  <p class="link-text" onclick="showModal('daftar')">
-    <i class="fas fa-user-plus"></i> Daftar Akun
-  </p>
-</div>
+    <div class="link-container">
+      <p class="link-text" onclick="showModal('lupa')">
+        <i class="fas fa-question-circle"></i> Lupa Password?
+      </p>
+      <p class="link-text" onclick="showModal('daftar')">
+        <i class="fas fa-user-plus"></i> Daftar Akun
+      </p>
+    </div>
+  </div>
 
-
-<script src="js/data.js"></script>
-<script src="js/script.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/script.js"></script>
 
 </body>
 </html>
