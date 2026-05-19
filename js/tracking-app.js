@@ -1,12 +1,10 @@
-const { createApp } = Vue;
-
-const app = createApp({
+new Vue({
+  el: '#trackingApp',
 
   // ============================
   // DATA
   // ============================
-  data() {
-    return {
+  data: {
 
       upbjjList: dataBahanAjar.upbjjList,
       pengirimanList: dataBahanAjar.pengirimanList,
@@ -21,9 +19,8 @@ const app = createApp({
         paket: '',
         tanggalKirim: '',
         total: 0
-      }
 
-    };
+    }
   },
 
   // ============================
@@ -32,12 +29,12 @@ const app = createApp({
   computed: {
 
     // Paket yang sedang dipilih
-    selectedPaket() {
+    selectedPaket: function() {
       return this.paketList.find(p => p.kode === this.newDO.paket);
     },
 
     // Auto-generate nomor DO berikutnya
-    nextNomorDO() {
+    nextNomorDO: function() {
       const tahun = new Date().getFullYear();
       const existing = Object.keys(this.trackingList);
       const nextSeq = existing.length + 1;
@@ -53,7 +50,7 @@ const app = createApp({
   watch: {
 
     // Update total saat paket berubah
-    selectedPaket(newVal) {
+    selectedPaket: function(newVal) {
       this.newDO.total = newVal ? newVal.harga : 0;
     }
 
@@ -67,7 +64,7 @@ const app = createApp({
     // --------------------------
     // TAMPILKAN PERJALANAN DO
     // --------------------------
-    showPerjalanan(item) {
+    showPerjalanan: function(item) {
 
       let isi = '<div style="text-align:left">';
 
@@ -102,7 +99,7 @@ const app = createApp({
     // --------------------------
     // SUBMIT DO BARU
     // --------------------------
-    submitDO() {
+    submitDO: function() {
 
       // Validasi kelengkapan data
       if (!this.newDO.nim || !this.newDO.nama || !this.newDO.ekspedisi || !this.newDO.paket) {
@@ -137,7 +134,7 @@ const app = createApp({
       };
 
       // Tambahkan ke trackingList
-      this.trackingList[nomor] = newData;
+      this.$set(this.trackingList, nomor, newData);
 
       // Notifikasi sukses
       Swal.fire({
@@ -160,7 +157,7 @@ const app = createApp({
     // --------------------------
     // RESET FORM
     // --------------------------
-    resetForm() {
+    resetForm: function() {
 
       this.newDO = {
         nomorDO: this.nextNomorDO,
@@ -179,10 +176,8 @@ const app = createApp({
   // ============================
   // MOUNTED
   // ============================
-  mounted() {
+  mounted: function() {
     this.newDO.nomorDO = this.nextNomorDO;
   }
 
 });
-
-app.mount('#trackingApp');
